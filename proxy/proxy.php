@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL ^ E_NOTICE);
+//error_reporting(E_ALL ^ E_NOTICE);
 
 $filename = "key";
 $handle = fopen($filename, "r");
@@ -15,7 +15,6 @@ curl_setopt($ch, CURLOPT_HEADER, 0);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
-//TODO: Add no profile exception
 if (is_numeric($steamid) && strlen($steamid) == 17){
 	}
 else{
@@ -30,9 +29,33 @@ else{
 	
 if ($mode == 'profile'){
 	header("Content-type: application/json");
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$key."&steamids=".$steamid."&format=json");
-	curl_exec($ch);
+	$api = curl_exec($ch);
+	$api = json_decode($api, true);
+	
+	//No profile exception
+	if(empty($api['response']['players'])){
+		$api['response']['players'][0]['steamid'] = "0";
+		$api = json_encode($api, JSON_PRETTY_PRINT);
+		echo $api;
 	}
+	else{
+		$chxml = curl_init();
+		curl_setopt($chxml, CURLOPT_HEADER, 0);
+		curl_setopt($chxml, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($chxml, CURLOPT_TIMEOUT, 5);
+		curl_setopt($chxml, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($chxml, CURLOPT_URL, "http://steamcommunity.com/profiles/".$steamid."/?xml=1");
+		$xml = curl_exec($chxml);
+		curl_close($chxml);
+		$xml = (array) simplexml_load_string($xml,'SimpleXMLElement', LIBXML_NOCDATA);
+		
+		$profile = array_merge($api, $xml);
+		$profile = json_encode($profile, JSON_PRETTY_PRINT);
+		echo $profile;
+	}
+}
 elseif ($mode == 'friends'){
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=".$key."&steamid=".$steamid."&relationship=friend&format=json");
@@ -83,6 +106,8 @@ elseif ($mode == 'friends'){
 		}
 	}
 	$jsoncounting = count($foutput['summary']);
+	
+	//If not PHP v5.4.0 or later, remove JSON_PRETTY_PRINT
 	$foutput = json_encode($foutput, JSON_PRETTY_PRINT);
 	header("Content-type: application/json");
 	echo $foutput;
