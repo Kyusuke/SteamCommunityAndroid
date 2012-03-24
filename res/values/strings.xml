@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World!</string>
-    <string name="app_name">SteamCommunityApp</string>
+    <string name="app_name">Steam Mobile</string>
+    <string name="mainUserPrompt">Enter a Steam ID.</string>
+    <string name="mainUserSearch">Search</string>
+    <string name="mainidBlank">No user given</string>
+    <string name="mainidInvalid">Profile cannot be found</string>
 
 </resources>
