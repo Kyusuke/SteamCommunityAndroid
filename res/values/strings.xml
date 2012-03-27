@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Main strings -->
     <string name="app_name">Steam Mobile</string>
     <string name="mainUserPrompt">Enter a Steam ID.</string>
     <string name="mainUserSearch">Search</string>
     <string name="mainidBlank">No user given</string>
     <string name="mainidInvalid">Profile cannot be found</string>
+    
+    <!-- Private profile strings -->
+    <string name="privateText">This profile is set to private and cannot be viewed.</string>
 
 </resources>

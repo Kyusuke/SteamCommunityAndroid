@@ -64,7 +64,6 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 					if (steamid.equals("0")){
 						final Context context = getApplicationContext();
 				        final CharSequence userBlank = getString(R.string.mainidInvalid);
-						//final CharSequence userBlank = steamid;
 				    	final int duration = Toast.LENGTH_SHORT;
 						progressBar.post(new Runnable() {
 							public void run() {

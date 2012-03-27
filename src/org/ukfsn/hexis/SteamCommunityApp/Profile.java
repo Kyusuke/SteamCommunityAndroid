@@ -24,13 +24,11 @@ public class Profile extends Activity {
 	String joinDate = null;
 	String hoursPlayed = null;
 	String rating = null;
+	String visibilityState = null;
 	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.profile);
-		
 		Bundle bundle = getIntent().getExtras();
 		String profileJSON = bundle.getString("profileJSON");
 		
@@ -41,35 +39,59 @@ public class Profile extends Activity {
 			e.printStackTrace();
 		}
 		
-		new Thread (new Runnable() {
-			public void run() {
-				final ImageView steamAvatar = (ImageView)findViewById(R.id.userAvatar);
-				final Drawable avatar = net.getImage(avatarURL);
-				steamAvatar.post(new Runnable() {
-					public void run(){
-						steamAvatar.setImageDrawable(avatar);
-					}
-				});
-			}
-		}).start();
-		
-		TextView personanameEdit = (TextView)findViewById(R.id.personaname);
-		personanameEdit.setText(personaname);
-		
-		TextView headlineEdit = (TextView)findViewById(R.id.headline);
-		headlineEdit.setText(headline);
-		
-		TextView summaryEdit = (TextView)findViewById(R.id.summary);
-		summaryEdit.setText(summary);
-		
-		TextView joinDateEdit = (TextView)findViewById(R.id.joinDate);
-		joinDateEdit.setText(personaname+ " joined at " +joinDate);
-		
-		TextView hoursPlayedEdit = (TextView)findViewById(R.id.hoursPlayed);
-		hoursPlayedEdit.setText(personaname+ " has wasted " +hoursPlayed+ "hours of their past two weeks.");
-		
-		TextView ratingEdit = (TextView)findViewById(R.id.rating);
-		ratingEdit.setText("Therefore, " +personaname+ " has an awesome rating of " +rating);
+		if(visibilityState.equals("3")){
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.profile);
+			
+			new Thread (new Runnable() {
+				public void run() {
+					final ImageView steamAvatar = (ImageView)findViewById(R.id.userAvatar);
+					final Drawable avatar = net.getImage(avatarURL);
+					steamAvatar.post(new Runnable() {
+						public void run(){
+							steamAvatar.setImageDrawable(avatar);
+						}
+					});
+				}
+			}).start();
+			
+			TextView personanameEdit = (TextView)findViewById(R.id.personaname);
+			personanameEdit.setText(personaname);
+			
+			TextView headlineEdit = (TextView)findViewById(R.id.headline);
+			headlineEdit.setText(headline);
+			
+			TextView summaryEdit = (TextView)findViewById(R.id.summary);
+			summaryEdit.setText(summary);
+			
+			TextView joinDateEdit = (TextView)findViewById(R.id.joinDate);
+			joinDateEdit.setText(personaname+ " joined at " +joinDate);
+			
+			TextView hoursPlayedEdit = (TextView)findViewById(R.id.hoursPlayed);
+			hoursPlayedEdit.setText(personaname+ " has wasted " +hoursPlayed+ "hours of their past two weeks.");
+			
+			TextView ratingEdit = (TextView)findViewById(R.id.rating);
+			ratingEdit.setText("Therefore, " +personaname+ " has an awesome rating of " +rating);
+		}
+		else{
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.profileprivate);
+			
+			new Thread (new Runnable() {
+				public void run() {
+					final ImageView steamAvatar = (ImageView)findViewById(R.id.userAvatar);
+					final Drawable avatar = net.getImage(avatarURL);
+					steamAvatar.post(new Runnable() {
+						public void run(){
+							steamAvatar.setImageDrawable(avatar);
+						}
+					});
+				}
+			}).start();
+			
+			TextView personanameEdit = (TextView)findViewById(R.id.personaname);
+			personanameEdit.setText(personaname);
+		}
 	}
 	
 	public void parseJSON(String result) throws JSONException {
@@ -84,11 +106,14 @@ public class Profile extends Activity {
 			avatarURL = players.getJSONObject(i).getString("avatarmedium");
 		}
 
-		headline = jsonObject.getString("headline");
-		summary = jsonObject.getString("summary");
-		joinDate = jsonObject.getString("memberSince");
-		hoursPlayed = jsonObject.getString("hoursPlayed2Wk");
-		rating = jsonObject.getString("steamRating");
+		visibilityState = jsonObject.getString("visibilityState");
+		if(visibilityState.equals("3")){
+			headline = jsonObject.getString("headline");
+			summary = jsonObject.getString("summary");
+			joinDate = jsonObject.getString("memberSince");
+			hoursPlayed = jsonObject.getString("hoursPlayed2Wk");
+			rating = jsonObject.getString("steamRating");
+		}	
 
     }
 }
