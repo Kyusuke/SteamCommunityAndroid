@@ -37,7 +37,7 @@ if ($mode == 'profile'){
 	//No profile exception
 	if(empty($api['response']['players'])){
 		$api['response']['players'][0]['steamid'] = "0";
-		$api = json_encode($api, JSON_PRETTY_PRINT);
+		$api = json_encode($api);
 		echo $api;
 	}
 	else{
@@ -52,7 +52,7 @@ if ($mode == 'profile'){
 		$xml = (array) simplexml_load_string($xml,'SimpleXMLElement', LIBXML_NOCDATA);
 		
 		$profile = array_merge($api, $xml);
-		$profile = json_encode($profile, JSON_PRETTY_PRINT);
+		$profile = json_encode($profile);
 		echo $profile;
 	}
 }
@@ -107,8 +107,7 @@ elseif ($mode == 'friends'){
 	}
 	$jsoncounting = count($foutput['summary']);
 	
-	//If not PHP v5.4.0 or later, remove JSON_PRETTY_PRINT
-	$foutput = json_encode($foutput, JSON_PRETTY_PRINT);
+	$foutput = json_encode($foutput);
 	header("Content-type: application/json");
 	echo $foutput;
 
@@ -120,5 +119,12 @@ elseif ($mode == 'backpack'){
 	}
 	
 // TODO: Remember to add in the item schema
+elseif ($mode == 'itemschema'){
+	header("Content-type: application/json");
+	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=".$key);
+	curl_setopt($ch, CURLOPT_HEADER, true);
+	curl_exec($ch);
+	}
+
 curl_close($ch);
 ?> 
