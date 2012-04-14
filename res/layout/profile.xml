@@ -52,4 +52,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/hoursPlayed"/>
+    
+    <Button
+		android:id="@+id/buttonFriends"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/rating"
+		android:layout_centerHorizontal="true"
+		android:text="@string/profileFriends" />
 </RelativeLayout>

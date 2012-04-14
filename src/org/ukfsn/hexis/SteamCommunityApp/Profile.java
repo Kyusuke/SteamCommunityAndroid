@@ -5,18 +5,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Profile extends Activity {
+public class Profile extends Activity implements OnClickListener {
 
 	Main main = new Main();
 	Net net = new Net();
 	
 	JSONObject jsonObject;
 	
+	String steamid = null;
 	String personaname = null;
 	String avatarURL = null;
 	String headline = null;
@@ -25,6 +30,8 @@ public class Profile extends Activity {
 	String hoursPlayed = null;
 	String rating = null;
 	String visibilityState = null;
+	
+	Button buttonFriends;
 	
 	
 	@Override
@@ -68,10 +75,13 @@ public class Profile extends Activity {
 			joinDateEdit.setText(personaname+ " joined at " +joinDate);
 			
 			TextView hoursPlayedEdit = (TextView)findViewById(R.id.hoursPlayed);
-			hoursPlayedEdit.setText(personaname+ " has wasted " +hoursPlayed+ "hours of their past two weeks.");
+			hoursPlayedEdit.setText(personaname+ " has played " +hoursPlayed+ "hours in their past two weeks.");
 			
 			TextView ratingEdit = (TextView)findViewById(R.id.rating);
-			ratingEdit.setText("Therefore, " +personaname+ " has an awesome rating of " +rating);
+			ratingEdit.setText("Therefore, " +personaname+ " has a rating of " +rating);
+			
+			buttonFriends = (Button)findViewById(R.id.buttonFriends);
+			buttonFriends.setOnClickListener(this);
 		}
 		else{
 			super.onCreate(savedInstanceState);
@@ -102,6 +112,7 @@ public class Profile extends Activity {
 		
 		for(int i=0;i<players.length(); i++)
 		{
+			steamid = players.getJSONObject(i).getString("steamid");
 			personaname = players.getJSONObject(i).getString("personaname");
 			avatarURL = players.getJSONObject(i).getString("avatarmedium");
 		}
@@ -116,4 +127,15 @@ public class Profile extends Activity {
 		}	
 
     }
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.buttonFriends:
+			Intent intentFriends = new Intent();
+			intentFriends.setClass(this, Friends.class);
+			intentFriends.putExtra("steamID", steamid);
+			startActivity(intentFriends);
+		}
+	}
 }

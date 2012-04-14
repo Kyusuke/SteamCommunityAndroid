@@ -8,6 +8,9 @@
     <string name="mainidBlank">No user given</string>
     <string name="mainidInvalid">Profile cannot be found</string>
     
+    <!-- Profile strings -->
+    <string name="profileFriends">Friends</string>
+    
     <!-- Private profile strings -->
     <string name="privateText">This profile is set to private and cannot be viewed.</string>
 
