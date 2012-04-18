@@ -54,7 +54,7 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 			progressBar.setVisibility(View.VISIBLE);
 			new Thread (new Runnable() {
 				public void run() {
-					profileJSON = net.getData("http://hexis.asiteforallmytrials.com/proxy.php?mode=profile&steamid=" +user);
+					profileJSON = net.getData("http://picpit.net/kyu/proxy.php?mode=profile&steamid=" +user);
 					try {
 						parseJSON(profileJSON);
 					} catch (JSONException e) {
