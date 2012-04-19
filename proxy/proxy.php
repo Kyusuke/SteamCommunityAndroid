@@ -118,11 +118,14 @@ elseif ($mode == 'backpack'){
 	curl_exec($ch);
 	}
 	
-// TODO: Remember to add in the item schema
 elseif ($mode == 'itemschema'){
 	header("Content-type: application/json");
+	$modifiedDate=$_GET["modifieddate"];
 	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=".$key);
-	curl_setopt($ch, CURLOPT_HEADER, true);
+	//Uncomment the next line to check header information (mainly to test for modified status).
+	//curl_setopt($ch, CURLOPT_HEADER, true);
+	curl_setopt($ch, CURLOPT_TIMEVALUE, $modifiedDate);
+	curl_setopt($ch, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
 	curl_exec($ch);
 	}
 
