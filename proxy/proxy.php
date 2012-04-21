@@ -118,16 +118,32 @@ elseif ($mode == 'backpack'){
 	curl_exec($ch);
 	}
 	
-elseif ($mode == 'itemschema'){
-	header("Content-type: application/json");
+elseif ($mode == 'itemschemadatecheck'){
 	$modifiedDate=$_GET["modifieddate"];
 	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=".$key);
 	//Uncomment the next line to check header information (mainly to test for modified status).
 	//curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_TIMEVALUE, $modifiedDate);
 	curl_setopt($ch, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
-	curl_exec($ch);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FILETIME, 1);
+	$schema = curl_exec($ch);
+	$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	if($status == "304"){
+		echo 0;
+		}
+	elseif($status == "200"){
+		$modDate = curl_getinfo($ch, CURLINFO_FILETIME);
+		echo $modDate;
+		}
+	else{
+		echo 1;
+		}
 	}
-
+elseif ($mode == 'itemschema'){
+	header("Content-type: application/json");
+	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=".$key);
+	curl_exec($ch);
+}
 curl_close($ch);
 ?> 
