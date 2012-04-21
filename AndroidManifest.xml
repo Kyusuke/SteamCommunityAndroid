@@ -26,6 +26,10 @@
             android:name=".Friends"
             android:label="@string/app_name">
         </activity>
+        <activity
+            android:name=".Backpack"
+            android:label="@string/app_name">
+        </activity>
     </application>
 
 </manifest>
