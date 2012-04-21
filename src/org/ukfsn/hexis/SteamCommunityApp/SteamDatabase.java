@@ -2,6 +2,7 @@ package org.ukfsn.hexis.SteamCommunityApp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -22,11 +23,6 @@ public class SteamDatabase extends SQLiteOpenHelper{
 	private static final String hisVanityName = "HistoryVanityName";
 	private static final String hisSteamID = "HistorySteamID";
 	
-	//Table information for storing the modified date of the item schema
-	private static final String schemaModDateTable = "schemaModDateTable";
-	private static final String schemaID = "schemaID";
-	private static final String schemaModDate = "schemaModDate";
-	
 	public SteamDatabase(Context context) {
 		super(context, dbName, null, dbVersion);
 	}
@@ -34,14 +30,11 @@ public class SteamDatabase extends SQLiteOpenHelper{
 	public void onCreate(SQLiteDatabase db){
 		db.execSQL("CREATE TABLE " +favouriteTable+ " (" +favID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +favVanityName+ " TEXT, " +favSteamID+ " INTEGER)");
 		db.execSQL("CREATE TABLE " +historyTable+ " (" +hisID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +hisVanityName+ " TEXT, " +hisSteamID+ " INTEGER)");
-		db.execSQL("CREATE TABLE " +schemaModDateTable+ " (" +schemaID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +schemaModDate+ " INTEGER)");
-		db.execSQL("INSERT into " +schemaModDateTable+ " (" +schemaID+ ") VALUES ('0')");
 	}
 	
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 		db.execSQL("DROP TABLE IF EXISTS " +favouriteTable);
 		db.execSQL("DROP TABLE IF EXISTS " +historyTable);
-		db.execSQL("DROP TABLE IF EXISTS " +schemaModDateTable);
 		onCreate(db);
 	}
 	

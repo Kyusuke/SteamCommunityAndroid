@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Profile extends Activity implements OnClickListener {
 
@@ -32,6 +34,7 @@ public class Profile extends Activity implements OnClickListener {
 	String visibilityState = null;
 	
 	Button buttonFriends;
+	Button buttonBackpack;
 	
 	
 	@Override
@@ -82,6 +85,9 @@ public class Profile extends Activity implements OnClickListener {
 			
 			buttonFriends = (Button)findViewById(R.id.buttonFriends);
 			buttonFriends.setOnClickListener(this);
+			
+			buttonBackpack = (Button)findViewById(R.id.buttonBackpack);
+			buttonBackpack.setOnClickListener(this);
 		}
 		else{
 			super.onCreate(savedInstanceState);
@@ -136,6 +142,13 @@ public class Profile extends Activity implements OnClickListener {
 			intentFriends.setClass(this, Friends.class);
 			intentFriends.putExtra("steamID", steamid);
 			startActivity(intentFriends);
+			break;
+		case R.id.buttonBackpack:
+			Intent intentBackpack = new Intent();
+			intentBackpack.setClass(this, Backpack.class);
+			intentBackpack.putExtra("steamID", steamid);
+			startActivity(intentBackpack);
+			break;
 		}
 	}
 }

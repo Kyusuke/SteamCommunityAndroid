@@ -10,6 +10,7 @@
     
     <!-- Profile strings -->
     <string name="profileFriends">Friends</string>
+    <string name="profileBackpack">Backpack</string>
     
     <!-- Private profile strings -->
     <string name="privateText">This profile is set to private and cannot be viewed.</string>

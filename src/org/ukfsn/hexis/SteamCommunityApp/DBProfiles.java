@@ -51,5 +51,4 @@ public class DBProfiles {
 	public int getHisSteamID(){
 		return this.hisSteamID;
 	}
-	
 }
