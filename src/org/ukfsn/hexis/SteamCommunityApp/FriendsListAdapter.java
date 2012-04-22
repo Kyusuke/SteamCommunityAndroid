@@ -6,6 +6,7 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +17,20 @@ import android.widget.TextView;
 
 public class FriendsListAdapter extends BaseAdapter {
 	
-	Net net = new Net();
-
 	private Activity activity;
 	private ArrayList<HashMap<String, String>> data;
 	private LayoutInflater inflater = null;
+	
+	private ImageView friendAvatar;
+	private HashMap<String, String> friend;
 	
 	public FriendsListAdapter(Activity a, ArrayList<HashMap<String, String>> d) {
 		activity = a;
 		data = d;
 		inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
+	
+	private final ListviewImageDownloader listviewImageDownloader = new ListviewImageDownloader();
 	
 	public int getCount(){
 		return data.size();
@@ -50,17 +54,20 @@ public class FriendsListAdapter extends BaseAdapter {
  		
 		TextView friendName = (TextView) rowView.findViewById(R.id.friendName);
 		TextView friendStatus = (TextView) rowView.findViewById(R.id.friendStatus);
-		ImageView friendAvatar = (ImageView) rowView.findViewById(R.id.friendAvatar);
+		friendAvatar = (ImageView) rowView.findViewById(R.id.friendAvatar);
 		
-		HashMap<String, String> friend = new HashMap<String, String>();
+		friend = new HashMap<String, String>();
 		friend = data.get(pos);
 		
 		friendName.setText(friend.get(Friends.KEY_PERSONANAME));
 		friendStatus.setText(friend.get(Friends.KEY_PERSONASTATE));
 		
-		Drawable avatar = net.getImage(friend.get(Friends.KEY_AVATAR));
-		friendAvatar.setImageDrawable(avatar);
+		listviewImageDownloader.download(friend.get(Friends.KEY_AVATAR), friendAvatar);
  		
 		return rowView;
+	}
+	
+	public ListviewImageDownloader getImageDownloader(){
+		return listviewImageDownloader;
 	}
 }

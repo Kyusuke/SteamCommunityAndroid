@@ -1,38 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+	<ImageView
+	    android:id="@+id/friendAvatar"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_centerVertical="true"
+	    android:src="@drawable/avatarmissing" />
+	
+	<TextView
+	    android:id="@+id/friendName"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toRightOf="@+id/friendAvatar"
+	    android:text="TextView" />
+	
+	<TextView
+	    android:id="@+id/friendStatus"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/friendName"
+	    android:layout_below="@+id/friendName"
+	    android:text="TextView" />
 
-        <ImageView
-            android:id="@+id/friendAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/avatarmissing" />
-
-        <TextView
-            android:id="@+id/friendName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/friendAvatar"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/friendStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/friendName"
-            android:layout_below="@+id/friendName"
-            android:text="TextView" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>
