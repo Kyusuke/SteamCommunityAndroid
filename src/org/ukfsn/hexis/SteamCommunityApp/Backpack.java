@@ -1,13 +1,16 @@
 package org.ukfsn.hexis.SteamCommunityApp;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +21,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,17 +37,24 @@ public class Backpack extends Activity{
 	String schema;
 	String sharedPref = "SteamCommPrefs";
 	String schemaFilename = "tf2itemschema.txt";
+	String schemaJSON;
 	
 	FileOutputStream fos;
-	FileInputStream fis;
 	SharedPreferences settings;
 	String dateMod;
 	TextView backpackStatus;
-	ByteArrayOutputStream bo= new ByteArrayOutputStream();
+	BufferedReader r;
+	StringBuilder sb;
 
 	JSONArray items;
+	JSONArray schemaItems;
+	String bpItemName = null;
+	String bpImage = null;
 	
 	static final String KEY_DEFINDEX = "defindex";
+	static final String KEY_BPDEFINDEX = "bpdefindex";
+	static final String KEY_BPITEMNAME = "bpitemname";
+	static final String KEY_BPIMAGE = "bpimage";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -80,6 +92,7 @@ public class Backpack extends Activity{
 	class DownloadNewSchema extends AsyncTask<String, Integer, String>{
 
 		protected void onPreExecute(){
+			backpackStatus.setVisibility(View.VISIBLE);
 			backpackStatus.setText("New schema downloading");
 		}
 		
@@ -112,17 +125,18 @@ public class Backpack extends Activity{
 	class RetrieveSchema extends AsyncTask<ByteArrayOutputStream, Integer, String>{
 		
 		protected void onPreExecute(){
+			backpackStatus.setVisibility(View.VISIBLE);
 			backpackStatus.setText("Loading schema");
 		}
 		
 		@Override
 		protected String doInBackground(ByteArrayOutputStream... arg0) {
 			try {
-				fis = openFileInput(schemaFilename);
-				int i = fis.read();
-				while(i != -1){
-					bo.write(i);
-					i = fis.read();
+				r = new BufferedReader(new InputStreamReader(openFileInput(schemaFilename), "utf8"),8192);
+				sb = new StringBuilder();
+				String line;
+				while((line = r.readLine()) != null){
+					sb.append(line);
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -131,10 +145,17 @@ public class Backpack extends Activity{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return bo.toString();
+			return sb.toString();
 		}
 		
 		protected void onPostExecute(String result){
+			schemaJSON = result;
+			try {
+				setSchemaItems(schemaJSON);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			new RetrieveUserBackpack().execute();
 		}
 	}
@@ -153,7 +174,7 @@ public class Backpack extends Activity{
 		}
 		
 		protected void onPostExecute(String profileBackpack){
-			ArrayList<HashMap<String, String>> backpackList = new ArrayList<HashMap<String, String>>();
+			ArrayList<TreeMap<String, String>> backpackList = new ArrayList<TreeMap<String, String>>();
 			try {
 				parseJSON(profileBackpack);
 
@@ -162,16 +183,31 @@ public class Backpack extends Activity{
 					
 					String defindex = backpackItem.getString(KEY_DEFINDEX);
 					
-					HashMap<String, String> map = new HashMap<String, String>();
-					map.put(KEY_DEFINDEX, defindex);
-					
-					backpackList.add(map);					
+					for(int j = 0; j < schemaItems.length(); j++){
+						JSONObject item = schemaItems.getJSONObject(j);
+						String bpdefindex = item.getString("defindex");
+						if(defindex.equals(bpdefindex)){
+							bpItemName = item.getString("name");
+							bpImage = item.getString("image_url");
+							
+							TreeMap<String, String> map = new TreeMap<String, String>();
+							map.put(KEY_BPDEFINDEX, bpdefindex);
+							map.put(KEY_BPITEMNAME, bpItemName);
+							map.put(KEY_BPIMAGE, bpImage);
+							
+							backpackList.add(map);
+							break;
+						}
+					}
+									
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			backpackStatus.setText("Everything's loaded, need to parse everything now. Good luck");
+			backpackStatus.setVisibility(View.INVISIBLE);
+			ListView list=(ListView)findViewById(R.id.backpackList);
+			BackpackListAdapter adapter=new BackpackListAdapter(Backpack.this, backpackList);
+			list.setAdapter(adapter);
 		}
 	}
 	
@@ -180,4 +216,11 @@ public class Backpack extends Activity{
 		JSONObject response = jsonObject.getJSONObject("result");
 		items = response.getJSONArray("items");
 	}
+	
+	public void setSchemaItems(String result) throws JSONException{
+		JSONObject jsonObject = new JSONObject(result);
+		JSONObject response = jsonObject.getJSONObject("result");
+		schemaItems = response.getJSONArray("items");
+	}
+	
 }
