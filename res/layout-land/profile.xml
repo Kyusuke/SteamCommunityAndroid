@@ -52,4 +52,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/hoursPlayed"/>
+    
+    <Button
+        android:id="@+id/buttonFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rating"
+        android:text="@string/profileFriends" />
+
+    <Button
+        android:id="@+id/buttonBackpack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/rating"
+        android:layout_toRightOf="@+id/buttonFriends"
+        android:text="@string/profileBackpack" />
 </RelativeLayout>
