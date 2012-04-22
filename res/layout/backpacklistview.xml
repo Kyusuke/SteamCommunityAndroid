@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <ImageView
+        android:id="@+id/backpackItemIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:maxHeight="20dp"
+        android:maxWidth="50dp"
+        android:src="@drawable/avatarmissing" />
+    
+    <TextView 
+        android:id="@+id/backpackItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/backpackItemIcon"
+        android:text="Item"/>
+    
+    <TextView
+        android:id="@+id/backpackDefindex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/backpackItemIcon"
+        android:layout_below="@+id/backpackItemName"
+        android:text="Defindex" />
+        
+</RelativeLayout>
