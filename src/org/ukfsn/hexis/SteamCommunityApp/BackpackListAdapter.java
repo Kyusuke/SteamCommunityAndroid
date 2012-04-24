@@ -69,6 +69,7 @@ public class BackpackListAdapter extends BaseAdapter {
 		backpackItemName.setText(bpName);
 		backpackDefindex.setText(bpDefindex);
 		
+		backpackItemIcon.setAdjustViewBounds(true);
 		backpackItemIcon.setMaxHeight(50);
 		backpackItemIcon.setMaxWidth(50);
 		listviewImageDownloader.download(image, backpackItemIcon);

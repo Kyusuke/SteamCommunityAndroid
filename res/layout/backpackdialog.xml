@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/bpIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/avatarmissing" />
+    
+    <TextView
+        android:id="@+id/bpItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bpIcon"
+        android:text="Item" />
+
+    <TextView
+        android:id="@+id/bpDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bpItemName"
+        android:layout_below="@+id/bpItemName"
+        android:text="Description" />
+    
+    <TextView
+        android:id="@+id/bpLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bpDescription"
+        android:layout_below="@+id/bpDescription"
+        android:text="Level" />
+
+    <TextView
+        android:id="@+id/bpQuality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bpLevel"
+        android:layout_below="@+id/bpLevel"
+        android:text="Quality" />
+    
+    <TextView
+        android:id="@+id/bpOrigin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bpQuality"
+        android:layout_below="@+id/bpQuality"
+        android:text="Origin" />
+
+    <Button
+        android:id="@+id/bpDialogCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/bpOrigin"
+        android:text="Button" />
+
+</RelativeLayout>

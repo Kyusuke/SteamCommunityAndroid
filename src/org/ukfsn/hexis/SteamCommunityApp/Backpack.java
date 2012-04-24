@@ -17,12 +17,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,13 +54,26 @@ public class Backpack extends Activity{
 
 	JSONArray items;
 	JSONArray schemaItems;
+	
+	private ArrayList<TreeMap<String, String>> backpackList;
+	
+	String defindex = null;
+	String level = null;
+	String quality = null;
+	String origin = null;
+	String bpDefindex = null;
 	String bpItemName = null;
+	String bpDescription = null;
 	String bpImage = null;
 	
 	static final String KEY_DEFINDEX = "defindex";
-	static final String KEY_BPDEFINDEX = "bpdefindex";
-	static final String KEY_BPITEMNAME = "bpitemname";
-	static final String KEY_BPIMAGE = "bpimage";
+	static final String KEY_LEVEL = "level";
+	static final String KEY_QUALITY = "quality";
+	static final String KEY_ORIGIN = "origin";
+	static final String KEY_BPDEFINDEX = "defindex";
+	static final String KEY_BPITEMNAME = "item_name";
+	static final String KEY_BPDESCRIPTION = "item_description";
+	static final String KEY_BPIMAGE = "image_url";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -68,6 +87,7 @@ public class Backpack extends Activity{
 		String modDate = settings.getString("schemaModDate", "0");
 		
 		String dateCheck = net.getData("http://picpit.net/kyu/proxy.php?mode=itemschemadatecheck&modifieddate=" +modDate);
+		Log.e("dateCheck", dateCheck);
 		dateCheck = dateCheck.substring(0, dateCheck.length() - 1);
 		dateMod = dateCheck;
 
@@ -169,30 +189,43 @@ public class Backpack extends Activity{
 		@Override
 		protected String doInBackground(Integer... args0){
 			String profileBackpack = net.getData("http://picpit.net/kyu/proxy.php?mode=backpack&steamid=" +steamID);
+			Log.e("profileBackpack", profileBackpack);
 
 			return profileBackpack;
 		}
 		
 		protected void onPostExecute(String profileBackpack){
-			ArrayList<TreeMap<String, String>> backpackList = new ArrayList<TreeMap<String, String>>();
+			backpackList = new ArrayList<TreeMap<String, String>>();
 			try {
 				parseJSON(profileBackpack);
 
 				for(int i = 0; i < items.length(); i++){
 					JSONObject backpackItem = items.getJSONObject(i);
 					
-					String defindex = backpackItem.getString(KEY_DEFINDEX);
+					defindex = backpackItem.getString(KEY_DEFINDEX);
+					level = backpackItem.getString(KEY_LEVEL);
+					quality = backpackItem.getString(KEY_QUALITY);
+					origin = backpackItem.getString(KEY_ORIGIN);
 					
 					for(int j = 0; j < schemaItems.length(); j++){
 						JSONObject item = schemaItems.getJSONObject(j);
-						String bpdefindex = item.getString("defindex");
-						if(defindex.equals(bpdefindex)){
-							bpItemName = item.getString("name");
-							bpImage = item.getString("image_url");
+						bpDefindex = item.getString(KEY_BPDEFINDEX);
+						if(defindex.equals(bpDefindex)){
+							bpItemName = item.getString(KEY_BPITEMNAME);
+							try {
+								bpDescription = item.getString(KEY_BPDESCRIPTION);
+							} catch (Exception e) {
+								bpDescription = "";
+							}
+							bpImage = item.getString(KEY_BPIMAGE);
 							
 							TreeMap<String, String> map = new TreeMap<String, String>();
-							map.put(KEY_BPDEFINDEX, bpdefindex);
+							map.put(KEY_BPDEFINDEX, bpDefindex);
+							map.put(KEY_LEVEL, level);
+							map.put(KEY_QUALITY, quality);
+							map.put(KEY_ORIGIN, origin);
 							map.put(KEY_BPITEMNAME, bpItemName);
+							map.put(KEY_BPDESCRIPTION, bpDescription);
 							map.put(KEY_BPIMAGE, bpImage);
 							
 							backpackList.add(map);
@@ -208,6 +241,44 @@ public class Backpack extends Activity{
 			ListView list=(ListView)findViewById(R.id.backpackList);
 			BackpackListAdapter adapter=new BackpackListAdapter(Backpack.this, backpackList);
 			list.setAdapter(adapter);
+			list.setOnItemClickListener(new OnItemClickListener(){
+				public void onItemClick(AdapterView<?> parent, View view, int pos, long id){
+					ImageView viewImageAvatar = (ImageView)view.findViewById(R.id.backpackItemIcon);
+					Drawable viewDrawableAvatar = viewImageAvatar.getDrawable();
+					TreeMap<String, String> map = backpackList.get(pos);
+					
+					Context mContext = Backpack.this;
+					final Dialog bpDialog = new Dialog(mContext);
+
+					bpDialog.setContentView(R.layout.backpackdialog);
+					bpDialog.setTitle(map.get(Backpack.KEY_BPITEMNAME));
+
+					ImageView bpIcon = (ImageView) bpDialog.findViewById(R.id.bpIcon);
+					TextView bpItem = (TextView) bpDialog.findViewById(R.id.bpItemName);
+					TextView bpDescription = (TextView) bpDialog.findViewById(R.id.bpDescription);
+					TextView bpLevel = (TextView) bpDialog.findViewById(R.id.bpLevel);
+					TextView bpQuality = (TextView) bpDialog.findViewById(R.id.bpQuality);
+					TextView bpOrigin = (TextView) bpDialog.findViewById(R.id.bpOrigin);
+					Button bpButtonDialogCancel = (Button) bpDialog.findViewById(R.id.bpDialogCancel);
+					
+					bpIcon.setImageDrawable(viewDrawableAvatar);
+					bpItem.setText(map.get(Backpack.KEY_BPITEMNAME));
+					bpDescription.setText(map.get(Backpack.KEY_BPDESCRIPTION));
+					bpLevel.setText(map.get(Backpack.KEY_LEVEL));
+					bpQuality.setText(map.get(Backpack.KEY_QUALITY));
+					bpOrigin.setText(map.get(Backpack.KEY_ORIGIN));
+					bpButtonDialogCancel.setText("Return to list");
+					
+					bpButtonDialogCancel.setOnClickListener(new View.OnClickListener() {			
+						@Override
+						public void onClick(View v) {
+							bpDialog.dismiss();
+						}
+					});
+					
+					bpDialog.show();
+				}
+			});
 		}
 	}
 	
