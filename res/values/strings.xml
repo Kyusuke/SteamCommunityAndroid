@@ -3,7 +3,7 @@
 
     <!-- Main strings -->
     <string name="app_name">Steam Mobile</string>
-    <string name="mainUserPrompt">Enter a Steam ID.</string>
+    <string name="mainUserPrompt">Enter a Steam ID or custom URL name.</string>
     <string name="mainUserSearch">Search</string>
     <string name="mainidBlank">No user given</string>
     <string name="mainidInvalid">Profile cannot be found</string>
