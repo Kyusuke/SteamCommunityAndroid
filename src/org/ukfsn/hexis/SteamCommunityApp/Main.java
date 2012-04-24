@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -61,6 +62,7 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					Log.e("JSON Return", profileJSON);
 					if (steamid.equals("0")){
 						final Context context = getApplicationContext();
 				        final CharSequence userBlank = getString(R.string.mainidInvalid);
