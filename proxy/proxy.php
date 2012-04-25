@@ -142,7 +142,7 @@ elseif ($mode == 'itemschemadatecheck'){
 	}
 elseif ($mode == 'itemschema'){
 	header("Content-type: application/json");
-	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=".$key);
+	curl_setopt($ch, CURLOPT_URL, "http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?language=en&key=".$key);
 	curl_exec($ch);
 }
 curl_close($ch);
