@@ -30,6 +30,10 @@
             android:name=".Backpack"
             android:label="@string/app_name">
         </activity>
+        <activity
+            android:name=".ShortcutList"
+            android:label="@string/app_name">
+        </activity>
     </application>
 
 </manifest>

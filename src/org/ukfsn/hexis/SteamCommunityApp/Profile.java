@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -20,9 +21,11 @@ public class Profile extends Activity implements OnClickListener {
 
 	Main main = new Main();
 	Net net = new Net();
+	SteamDatabase steamDatabase = new SteamDatabase(this);
 	
 	JSONObject jsonObject;
 	
+	String user = null;
 	String steamid = null;
 	String personaname = null;
 	String avatarURL = null;
@@ -35,12 +38,14 @@ public class Profile extends Activity implements OnClickListener {
 	
 	Button buttonFriends;
 	Button buttonBackpack;
+	Button buttonAddToFav;
 	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		Bundle bundle = getIntent().getExtras();
 		String profileJSON = bundle.getString("profileJSON");
+		user = bundle.getString("user");
 		
 		try {
 			parseJSON(profileJSON);
@@ -88,6 +93,18 @@ public class Profile extends Activity implements OnClickListener {
 			
 			buttonBackpack = (Button)findViewById(R.id.buttonBackpack);
 			buttonBackpack.setOnClickListener(this);
+			
+			buttonAddToFav = (Button)findViewById(R.id.buttonAddToFav);
+			buttonAddToFav.setVisibility(View.VISIBLE);
+			steamDatabase.open();
+			Cursor c = steamDatabase.getFavProfile(steamid);
+			if(c.getCount() > 0){
+				buttonAddToFav.setVisibility(View.INVISIBLE);
+			}
+			else{
+				buttonAddToFav.setOnClickListener(this);
+			}
+			steamDatabase.close();
 		}
 		else{
 			super.onCreate(savedInstanceState);
@@ -148,6 +165,17 @@ public class Profile extends Activity implements OnClickListener {
 			intentBackpack.setClass(this, Backpack.class);
 			intentBackpack.putExtra("steamID", steamid);
 			startActivity(intentBackpack);
+			break;
+		case R.id.buttonAddToFav:
+			steamDatabase.open();
+			steamDatabase.addFavProfile(personaname,steamid);
+			steamDatabase.close();
+			buttonAddToFav.setVisibility(View.INVISIBLE);
+			Context context = getApplicationContext();
+	        CharSequence userBlank = getString(R.string.profileFavAdded);
+	    	int duration = Toast.LENGTH_SHORT;
+			Toast userBlankToast = Toast.makeText(context, userBlank, duration);
+			userBlankToast.show();
 			break;
 		}
 	}

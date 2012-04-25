@@ -53,6 +53,13 @@
 	            android:layout_below="@+id/userText"
 	            android:text="@string/mainUserSearch" />
 
+	        <Button
+                android:id="@+id/buttonFavourites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/steamLogo"
+                android:text="@string/mainFavourites" />
 	    </RelativeLayout>
 
     </ScrollView>

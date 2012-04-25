@@ -7,12 +7,19 @@
     <string name="mainUserSearch">Search</string>
     <string name="mainidBlank">No user given</string>
     <string name="mainidInvalid">Profile cannot be found</string>
+    <string name="mainFavourites">View favourites</string>
     
     <!-- Profile strings -->
     <string name="profileFriends">Friends</string>
     <string name="profileBackpack">Backpack</string>
+    <string name="profileAddToFav">Add to favourites</string>
+    <string name="profileFavAdded">Profile added to favourites</string>
     
     <!-- Private profile strings -->
     <string name="privateText">This profile is set to private and cannot be viewed.</string>
+    
+    <!-- ShortcutList strings -->
+    <string name="shortcutEmpty">The list is empty!</string>
+    <string name="shortcutDel">The profile has been deleted</string>
 
 </resources>

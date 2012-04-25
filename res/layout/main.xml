@@ -54,7 +54,18 @@
                 android:layout_below="@+id/userText"
                 android:layout_centerHorizontal="true" />
     
+            <Button
+		        android:id="@+id/buttonFavourites"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_below="@+id/buttonSearch"
+		        android:text="@string/mainFavourites" />
+            
         </RelativeLayout>
 
     </ScrollView>
+
+   
+
 </LinearLayout>
