@@ -60,6 +60,15 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/steamLogo"
                 android:text="@string/mainFavourites" />
+	        
+	        <Button
+                android:id="@+id/buttonHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/steamLogo"
+                android:layout_toRightOf="@+id/buttonFavourites"
+                android:text="@string/mainHistory" />
+	        
 	    </RelativeLayout>
 
     </ScrollView>

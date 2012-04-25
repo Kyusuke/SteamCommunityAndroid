@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -53,6 +54,14 @@ public class Profile extends Activity implements OnClickListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		steamDatabase.open();
+		Cursor cProfile = steamDatabase.getHisProfile(steamid);
+		if(cProfile.getCount() <= 0){
+			steamDatabase.addHisProfile(personaname, steamid);
+			Log.e("HisProfile", "Profile added");
+		}
+		steamDatabase.close();
 		
 		if(visibilityState.equals("3")){
 			super.onCreate(savedInstanceState);

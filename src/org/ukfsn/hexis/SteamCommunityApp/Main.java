@@ -30,6 +30,7 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 	JSONArray players;
 	Button buttonSearch;
 	Button buttonFav;
+	Button buttonHis;
 	
 	String steamid = null;
 	
@@ -48,6 +49,9 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 		buttonFav = (Button)findViewById(R.id.buttonFavourites);
 		buttonFav.setOnClickListener(this);
 		
+		buttonHis = (Button)findViewById(R.id.buttonHistory);
+		buttonHis.setOnClickListener(this);
+		
 		userForm = (EditText)findViewById(R.id.userText);
 		userForm.setOnKeyListener(this);
 	}
@@ -59,6 +63,7 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 			if(user.length() > 0){
 				buttonSearch.setVisibility(View.INVISIBLE);
 				buttonFav.setVisibility(View.INVISIBLE);
+				buttonHis.setVisibility(View.INVISIBLE);
 				progressBar.setVisibility(View.VISIBLE);
 				new Thread (new Runnable() {
 					public void run() {
@@ -80,6 +85,7 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 									progressBar.setVisibility(View.INVISIBLE);
 									buttonSearch.setVisibility(View.VISIBLE);
 									buttonFav.setVisibility(View.VISIBLE);
+									buttonHis.setVisibility(View.VISIBLE);
 									invalidID.show(); 
 								}
 							});			
@@ -94,6 +100,7 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 				    			progressBar.setVisibility(View.INVISIBLE);
 				    			buttonSearch.setVisibility(View.VISIBLE);
 				    			buttonFav.setVisibility(View.VISIBLE);
+				    			buttonHis.setVisibility(View.VISIBLE);
 				    			}
 				    		});
 				    		startActivity(myintent);
@@ -109,10 +116,19 @@ public class Main extends Activity implements OnClickListener, OnKeyListener {
 				userBlankToast.show();
 			}
 			break;
+			
 		case R.id.buttonFavourites:
-			Intent shortcutIntent = new Intent();
-			shortcutIntent.setClass(Main.this, ShortcutList.class);
-			startActivity(shortcutIntent);
+			Intent favouriteIntent = new Intent();
+			favouriteIntent.setClass(Main.this, ShortcutList.class);
+			favouriteIntent.putExtra("mode", "favourite");
+			startActivity(favouriteIntent);
+			break;
+			
+		case R.id.buttonHistory:
+			Intent historyIntent = new Intent();
+			historyIntent.setClass(Main.this, ShortcutList.class);
+			historyIntent.putExtra("mode", "history");
+			startActivity(historyIntent);
 			break;
 		}
 	}

@@ -8,6 +8,7 @@
     <string name="mainidBlank">No user given</string>
     <string name="mainidInvalid">Profile cannot be found</string>
     <string name="mainFavourites">View favourites</string>
+    <string name="mainHistory">View history</string>
     
     <!-- Profile strings -->
     <string name="profileFriends">Friends</string>

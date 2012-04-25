@@ -62,6 +62,14 @@
 		        android:layout_below="@+id/buttonSearch"
 		        android:text="@string/mainFavourites" />
             
+            <Button
+                android:id="@+id/buttonHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/buttonSearch"
+                android:text="@string/mainHistory" />
+            
         </RelativeLayout>
 
     </ScrollView>

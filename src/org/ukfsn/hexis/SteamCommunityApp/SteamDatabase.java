@@ -72,15 +72,28 @@ public class SteamDatabase extends SQLiteOpenHelper{
 		return favCursor;
 	}
 	
-	void addHisProfile(DBProfiles his){
+	void addHisProfile(String getHisVanityName, String getHisSteamID){
 		ContentValues cv = new ContentValues();
 		
-		cv.put(hisVanityName, his.getFavVanityName());
-		cv.put(hisSteamID, his.getFavSteamID());
+		cv.put(hisVanityName, getHisVanityName);
+		cv.put(hisSteamID, getHisSteamID);
 		db.insert(historyTable, null, cv);
 	}
 	
-	public void deleteHisProfile(DBProfiles his){
-		db.delete(historyTable, hisSteamID+ " = " + (String.valueOf(his.getHisID())), null);
+	public void deleteHisProfile(String getHisId){
+		db.delete(historyTable, hisID+ " = " +getHisId, null);
+	}
+	
+	public Cursor getHisList(){
+		Cursor hisCursor = db.query(historyTable,
+				new String[]{hisID+ " AS _id", hisVanityName,hisSteamID}, 
+				null, null, null, null, hisID);
+		return hisCursor;
+	}
+	
+	public Cursor getHisProfile(String steamID){
+		Cursor hisCursor = db.query(historyTable, null,
+				hisSteamID+ " = " +steamID, null, null, null, null);
+		return hisCursor;
 	}
 }

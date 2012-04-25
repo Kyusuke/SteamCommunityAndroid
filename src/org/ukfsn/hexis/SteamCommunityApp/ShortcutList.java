@@ -34,21 +34,30 @@ public class ShortcutList extends Activity{
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
+		Bundle bundle = getIntent().getExtras();
+		final String mode = bundle.getString("mode");
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shortcutlist);
 		
 		TextView emptyText = (TextView)findViewById(R.id.shortcutEmpty);
 		emptyText.setVisibility(View.INVISIBLE);
 		steamDatabase.open();
-		c = steamDatabase.getFavList();
+		
+		if(mode.equals("favourite")){
+			c = steamDatabase.getFavList();
+		}
+		else if(mode.equals("history")){
+			c = steamDatabase.getHisList();
+		}
 		if(c != null && c.getCount() > 0){			
-			final SimpleCursorAdapter favAdapter = new SimpleCursorAdapter(this, 
+			final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
 					R.layout.shortcutlistview, 
 					c, 
 					new String[]{c.getColumnName(1),c.getColumnName(2)}, 
 					new int[]{R.id.shortcutVanityName, R.id.shortcutSteamID});
 			list = (ListView)findViewById(R.id.shortcutList);
-			list.setAdapter(favAdapter);
+			list.setAdapter(adapter);
 			list.setOnItemClickListener(new OnItemClickListener(){
 				public void onItemClick(AdapterView<?> parent, View view, int pos, long id){
 					c.moveToPosition(pos);
@@ -69,9 +78,16 @@ public class ShortcutList extends Activity{
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								steamDatabase.open();
-								steamDatabase.deleteFavProfile(c.getString(0));
-								c = steamDatabase.getFavList();
-								favAdapter.changeCursor(c);
+								if(mode.equals("favourite")){
+									steamDatabase.deleteFavProfile(c.getString(0));
+									c = steamDatabase.getFavList();
+								}
+								else if(mode.equals("history")){
+									steamDatabase.deleteHisProfile(c.getString(0));
+									c = steamDatabase.getHisList();
+								}
+								
+								adapter.changeCursor(c);
 								steamDatabase.close();	
 								
 								CharSequence profileDel = getString(R.string.shortcutDel);
